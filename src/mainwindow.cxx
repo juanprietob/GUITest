@@ -1,10 +1,10 @@
-#include "mainwindow.hxx"
+#include "mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
-    :QMainWindow(parent),ui(new Ui::MainWindow)
+    :QMainWindow(parent)
 {
-    ui->setupUi(this);
-    connect(ui->pushButton,SIGNAL(clicked()),this,SLOT(run()));
+    this->setupUi( this );
+    connect(this->pushButton,SIGNAL(clicked()),this,SLOT(run()));
     inputReader = ReaderType::New();
     outputWriter = WriterType::New();
     filter = FilterType::New();
@@ -12,22 +12,22 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
-    delete ui;
+    
 }
 
 void MainWindow::run()
 {
     // Load the image
-    inputReader->SetFileName(this->ui->inputPath->text().toStdString());
+    inputReader->SetFileName(this->inputPath->text().toStdString());
     inputReader->Update();
 
     // Create the filter
-    filter->SetKernelSize(this->ui->horizontalSlider->sliderPosition());
+    filter->SetKernelSize(this->horizontalSlider->sliderPosition());
     filter->SetInput(inputReader->GetOutput());
     filter->Update();
 
     // Write image
-    outputWriter->SetFileName(this->ui->inputPath->text().toStdString());
+    outputWriter->SetFileName(this->inputPath->text().toStdString());
     outputWriter->SetInput(filter->GetOutput());
     outputWriter->Update();
     close();
