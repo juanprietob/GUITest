@@ -4,27 +4,17 @@ project(MyProject)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-find_package(Qt5Widgets REQUIRED)
+find_package(Qt5 COMPONENTS Widgets REQUIRED)
+
 include_directories(${Qt5Widgets_INCLUDE_DIRS})
+
+add_definitions(${Qt5Widgets_DEFINITIONS})
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
+set(QT_LIBRARIES ${Qt5Widgets_LIBRARIES})
 
 find_package(ITK REQUIRED)
 include(${ITK_USE_FILE})
 
-QT5_WRAP_UI(source_files_ui src/mainwindow.ui)
-QT5_WRAP_CPP(source_files_moc src/mainwindow.cxx)
-
-
-file( GLOB_RECURSE
-        source_files
-        src/*.hxx
-        src/*.cxx
-)
-
-set(EXECUTABLE_OUTPUT_PATH build)
-
-add_executable(main ${source_files} ${source_files_ui} ${source_files_moc})
-
-qt5_use_modules(main Widgets Core)
-
-target_link_libraries(main Qt5::Widgets)
+include_directories(src)
+add_subdirectory(src)
 
